@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="KontrolApp.MainPage"
+             Title="KontrolApp">
+    <Grid RowSpacing="1" ColumnSpacing="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Button Text="Hat Takip"
+            Grid.Row="0"
+            FontSize="38"
+            FontAttributes="Bold"
+            Margin="15"
+            CornerRadius="35"
+            BackgroundColor="#4CAF50"
+            TextColor="White"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="FillAndExpand"
+            Clicked="OnHatTakipClicked"/>
+
+        <Button Text="Kesim Takip"
+            Grid.Row="1"
+            FontSize="38"
+            FontAttributes="Bold"
+            Margin="15"
+            CornerRadius="35"
+            BackgroundColor="#2196F3"
+            TextColor="White"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="FillAndExpand"
+            Clicked="OnKesimTakipClicked"/>
+
+        <Button Text="Otomat Takip"
+            Grid.Row="2"
+            FontSize="38"
+            FontAttributes="Bold"
+            Margin="15"
+            CornerRadius="35"
+            BackgroundColor="#FF9800"
+            TextColor="White"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="FillAndExpand"
+            Clicked="OnOtomatTakipClicked"/>
+
+        <Button Text="Raporlar"
+            Grid.Row="3"
+            FontSize="38"
+            FontAttributes="Bold"
+            Margin="15"
+            CornerRadius="35"
+            BackgroundColor="#9C27B0"
+            TextColor="White"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="FillAndExpand"
+            Clicked="OnRaporlarClicked"/>
+
+        <Button Text="Ayarlar"
+            Grid.Row="4"
+            FontSize="38"
+            FontAttributes="Bold"
+            Margin="15"
+            CornerRadius="35"
+            BackgroundColor="Black"
+            TextColor="White"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="FillAndExpand"
+            Clicked="OnAyarlarClicked"/>
+    </Grid>
+</ContentPage>
