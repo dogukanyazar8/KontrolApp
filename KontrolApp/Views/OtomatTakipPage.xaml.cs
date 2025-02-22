@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using KontrolApp.Views;
 using System.Windows.Input;
 using KontrolApp.Services;
 
@@ -14,7 +15,8 @@ public partial class OtomatTakipPage : ContentPage
     private const string IdColumn = "id";
     private const string NameColumn = "otomat_adi";
     private const string StatusColumn = "otomat_durumu";
-    private const string OrderColumn = "siparis_adi";
+    private const string OrderNo = "siparis_no";
+    private const string ModelColumn = "model_adi";
     private const string OrderQuantity = "siparis_adet";
     private const string CompletedOrders = "siparis_tamamlanan";
 
@@ -23,15 +25,19 @@ public partial class OtomatTakipPage : ContentPage
         InitializeComponent();
         LoadData();
     }
-    private async void MachinesList_Refreshing(object sender, EventArgs e)
+    public async Task RefreshData()
+    {
+        MachinesList_Refreshing(MachinesList, EventArgs.Empty);
+    }
+
+    public async void MachinesList_Refreshing(object sender, EventArgs e)
     {
         await LoadData();
-
         MachinesList.IsRefreshing = false;
     }
-    private async Task LoadData()
+    public async Task LoadData()
     {
-        var machines = await _supabaseService.GetDataAsync(TableName, IdColumn, new[] { IdColumn, NameColumn, OrderColumn, OrderQuantity, CompletedOrders, StatusColumn });
+        var machines = await _supabaseService.GetDataAsync(TableName, IdColumn, new[] { IdColumn, NameColumn, StatusColumn, OrderNo, ModelColumn, OrderQuantity, CompletedOrders });
 
         MainThread.BeginInvokeOnMainThread(() =>
         {
@@ -49,7 +55,8 @@ public partial class OtomatTakipPage : ContentPage
                 {
                     id = m.ContainsKey(IdColumn) && m[IdColumn] != null ? Convert.ToInt32(m[IdColumn]) : 0,
                     otomat_adi = m.ContainsKey(NameColumn) && m[NameColumn] != null ? m[NameColumn].ToString() : "Bilinmiyor",
-                    siparis_adi = m.ContainsKey(OrderColumn) && m[OrderColumn] != null ? m[OrderColumn].ToString() : "Bilinmiyor",
+                    siparis_no = m.ContainsKey(OrderNo) && m[OrderNo] != null ? m[OrderNo].ToString() : "Bilinmiyor",
+                    model_adi = m.ContainsKey(ModelColumn) && m[ModelColumn] != null ? m[ModelColumn].ToString() : "Bilinmiyor",
                     siparis_adet = totalOrders,
                     siparis_tamamlanan = completedOrders,
                     otomat_durumu = m.ContainsKey(StatusColumn) && m[StatusColumn] != null ? m[StatusColumn].ToString() : "Bilinmiyor",
@@ -64,18 +71,17 @@ public partial class OtomatTakipPage : ContentPage
 
     private async void OnUpdateStatusClicked(object sender, EventArgs e)
     {
-        if (sender is Button button && button.CommandParameter is int machineId)
+        Button button = sender as Button;
+        if (button == null || button.CommandParameter == null)
+            return;
+
+        int otomatId = Convert.ToInt32(button.CommandParameter);
+        var selectedOtomat = MachinesList.ItemsSource.Cast<dynamic>().FirstOrDefault(m => m.id == otomatId);
+
+        if (selectedOtomat != null)
         {
-            var newStatus = "Kapalý"; // Burada durumu deðiþtirebilirsin.
-
-            bool success = await _supabaseService.UpdateStatusAsync(TableName, IdColumn, machineId, StatusColumn, newStatus);
-
-            if (success)
-                await DisplayAlert("Baþarýlý", "Makine durumu güncellendi.", "Tamam");
-            else
-                await DisplayAlert("Hata", "Güncelleme baþarýsýz oldu.", "Tamam");
-
-            LoadData();
+            string otomatName = selectedOtomat.otomat_adi;
+            await Navigation.PushAsync(new OtomatTakipDurum(otomatId, otomatName));
         }
     }
 }

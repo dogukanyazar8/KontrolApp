@@ -20,6 +20,8 @@ namespace KontrolApp
 #if DEBUG
     		builder.Logging.AddDebug();
             builder.Services.AddSingleton<SupabaseAuthService>();
+            builder.Services.AddSingleton<BoldIfDevamEdiyor>();
+            builder.Services.AddSingleton<OrangeIfDevamEdiyor>();
 #endif
 
             return builder.Build();

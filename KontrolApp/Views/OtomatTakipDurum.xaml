@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="KontrolApp.Views.OtomatTakipDurum"
+             BackgroundColor="#F5F5F5">
+
+    <ScrollView>
+        <StackLayout Padding="30" Spacing="20" VerticalOptions="CenterAndExpand">
+
+            <!-- Üretim Ekle Başlığı -->
+            <Label Text="Üretim Ekle" 
+                   FontSize="26" 
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   TextColor="#37474F"/>
+
+            <!-- Seçilen Otomat Bilgisi -->
+            <Frame BackgroundColor="White" Padding="15" HasShadow="True" CornerRadius="10">
+                <Label x:Name="OtomatBilgiLabel"
+                       FontSize="20"
+                       TextColor="#37474F"/>
+            </Frame>
+
+            <!-- Sipariş Numarası Seçimi -->
+            <Label Text="Sipariş Numarası" 
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   TextColor="#37474F"/>
+            <Border Stroke="#B0BEC5" StrokeThickness="2" Padding="8" BackgroundColor="White">
+                <Picker x:Name="SiparisNoPicker"
+                        Title="Sipariş Numarası Seçin"
+                        FontSize="18"
+                        TextColor="Black"
+                        SelectedIndexChanged="OnSiparisNoSelected"/>
+            </Border>
+
+            <!-- Seçilen Siparişin Modeli -->
+            <Label x:Name="SiparisModelLabel"
+                   Text="Model"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   TextColor="#37474F"/>
+
+            <!-- Başlangıç Tarihi -->
+            <Label Text="Başlangıç Tarihi" 
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   TextColor="#37474F"/>
+            <Border Stroke="#B0BEC5" StrokeThickness="2" Padding="8" BackgroundColor="#E0E0E0">
+                <Label x:Name="BaslangicTarihiLabel"
+                       FontSize="18"
+                       TextColor="Black"/>
+            </Border>
+
+            <!-- Başlangıç Saati -->
+            <Label Text="Başlangıç Saati" 
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   TextColor="#37474F"/>
+            <Border Stroke="#B0BEC5" StrokeThickness="2" Padding="8" BackgroundColor="White">
+                <TimePicker x:Name="BaslangicSaatiPicker"
+                            FontSize="18"
+                            TextColor="Black"/>
+            </Border>
+
+            <!-- Güncelle Butonu -->
+            <Button Text="Güncelle"
+                    Clicked="OnGuncelleClicked"
+                    BackgroundColor="#4CAF50"
+                    TextColor="White"
+                    FontSize="18"
+                    Padding="12"
+                    HorizontalOptions="Fill"
+                    CornerRadius="8"/>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

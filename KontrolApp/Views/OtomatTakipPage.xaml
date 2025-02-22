@@ -2,9 +2,18 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="KontrolApp.OtomatTakipPage"
+             xmlns:local="clr-namespace:KontrolApp"
              NavigationPage.HasNavigationBar="False"
              BackgroundColor="#F5F5F5">
 
+
+<ContentPage.Resources>
+        <ResourceDictionary>
+            <local:BoldIfDevamEdiyor x:Key="BoldIfDevamEdiyor"/>
+            <local:OrangeIfDevamEdiyor x:Key="OrangeIfDevamEdiyor"/>
+        </ResourceDictionary>
+</ContentPage.Resources>
+    
     <StackLayout Padding="20" Spacing="10">
         <!-- Başlık -->
         <Label Text="Makine Listesi" 
@@ -34,7 +43,7 @@
                                            TextColor="#37474F"
                                            VerticalOptions="Center"/>
 
-                                    <Label Text="{Binding siparis_adi}" 
+                                    <Label Text="{Binding model_adi}" 
                                            FontSize="14"
                                            TextColor="#607D8B"
                                            VerticalOptions="Center"/>
@@ -50,7 +59,8 @@
                                 <StackLayout Orientation="Horizontal" Spacing="10" VerticalOptions="Center">
                                     <Label Text="{Binding otomat_durumu}" 
                                            FontSize="14" 
-                                           TextColor="{Binding otomat_durumu}"
+                                           FontAttributes="{Binding otomat_durumu, Converter={StaticResource BoldIfDevamEdiyor}}"
+                                           TextColor="{Binding otomat_durumu, Converter={StaticResource OrangeIfDevamEdiyor}}"
                                            VerticalOptions="Center"/>
 
                                     <!-- Tamamlanma Oranı Bar (Sol Başlangıç) -->

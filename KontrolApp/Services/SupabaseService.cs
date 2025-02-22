@@ -74,33 +74,26 @@ namespace KontrolApp.Services
                 return new List<Dictionary<string, object>>();
             }
         }
-
-        // Genel amaçlı dinamik güncelleme metodu
-        public async Task<bool> UpdateStatusAsync(string tableName, string idColumn, int id, string statusColumn, string newStatus)
+        public async Task<bool> UpdateDataAsync(string tableName, string idColumn, int id, Dictionary<string, object> updateValues)
         {
             try
             {
                 string url = $"{_supabaseUrl}/rest/v1/{tableName}?{idColumn}=eq.{id}";
+                var jsonBody = JsonSerializer.Serialize(updateValues);
+                var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
 
-                var updateData = new Dictionary<string, object>
+                var request = new HttpRequestMessage(new HttpMethod("PATCH"), url)
                 {
-                    { statusColumn, newStatus }
+                    Content = content
                 };
 
-                var jsonContent = new StringContent(JsonSerializer.Serialize(updateData), Encoding.UTF8, "application/json");
-                var response = await _httpClient.PatchAsync(url, jsonContent);
+                var response = await _httpClient.SendAsync(request);
 
-                if (response.IsSuccessStatusCode)
-                {
-                    return true;
-                }
-
-                Debug.WriteLine($"Durum güncelleme hatası: {response.ReasonPhrase}");
-                return false;
+                return response.IsSuccessStatusCode;
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Durum güncellenirken hata oluştu: {ex.Message}");
+                Console.WriteLine($"Güncelleme hatası: {ex.Message}");
                 return false;
             }
         }
