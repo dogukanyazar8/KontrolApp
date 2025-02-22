@@ -35,7 +35,7 @@ namespace KontrolApp.Services
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    Console.WriteLine($"❌ Login hatası: {response.ReasonPhrase}");
+                    Console.WriteLine($"Login hatası: {response.ReasonPhrase}");
                     return false;
                 }
 
@@ -44,7 +44,7 @@ namespace KontrolApp.Services
 
                 if (users.Count == 0)
                 {
-                    Console.WriteLine("❌ Kullanıcı bulunamadı.");
+                    Console.WriteLine("Kullanıcı bulunamadı.");
                     return false;
                 }
 

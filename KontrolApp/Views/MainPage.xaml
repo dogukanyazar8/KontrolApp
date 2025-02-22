@@ -14,75 +14,86 @@
     </ContentPage.Background>
 
     <ScrollView>
-        <Grid Padding="20" RowSpacing="20" VerticalOptions="CenterAndExpand">
-            <!-- Satır tanımları -->
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+        <StackLayout Padding="30" Spacing="20" VerticalOptions="CenterAndExpand">
+
+            <!-- Logo ve Başlık Alanı -->
+            <Grid ColumnSpacing="10" VerticalOptions="Start">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Şirket Logosu (Sola Hizalı) -->
+                <Image Source="logo.png" 
+                       HeightRequest="120"
+                       WidthRequest="100"
+                       Aspect="AspectFit"
+                       VerticalOptions="Center"
+                       Grid.Column="0"/>
+
+                <!-- "Lucca Panel" Yazısı -->
+                <StackLayout VerticalOptions="Center" Grid.Column="1">
+                    <Label Text="Lucca" 
+                           FontSize="40"
+                           FontAttributes="Bold"
+                           TextColor="#37474F"/>
+                    <Label Text="Panel" 
+                           FontSize="30"
+                           FontAttributes="Bold"
+                           TextColor="#757575"/>
+                </StackLayout>
+            </Grid>
 
             <!-- Hat Takip Kartı -->
-            <Frame Grid.Row="0" CornerRadius="20" HasShadow="True" BackgroundColor="#4CAF50">
-                <Grid Padding="15">
-                    <Button Text="Hat Takip"
-                            FontSize="24"
-                            FontAttributes="Bold"
-                            TextColor="White"
-                            BackgroundColor="Transparent"
-                            Clicked="OnHatTakipClicked"/>
-                </Grid>
+            <Frame CornerRadius="15" HasShadow="True" BackgroundColor="#4CAF50">
+                <Button Text="Hat Takip"
+                        FontSize="22"
+                        FontAttributes="Bold"
+                        TextColor="White"
+                        BackgroundColor="Transparent"
+                        Clicked="OnHatTakipClicked"/>
             </Frame>
 
             <!-- Kesim Takip Kartı -->
-            <Frame Grid.Row="1" CornerRadius="20" HasShadow="True" BackgroundColor="#2196F3">
-                <Grid Padding="15">
-                    <Button Text="Kesim Takip"
-                            FontSize="24"
-                            FontAttributes="Bold"
-                            TextColor="White"
-                            BackgroundColor="Transparent"
-                            Clicked="OnKesimTakipClicked"/>
-                </Grid>
+            <Frame CornerRadius="15" HasShadow="True" BackgroundColor="#2196F3">
+                <Button Text="Kesim Takip"
+                        FontSize="22"
+                        FontAttributes="Bold"
+                        TextColor="White"
+                        BackgroundColor="Transparent"
+                        Clicked="OnKesimTakipClicked"/>
             </Frame>
 
             <!-- Otomat Takip Kartı -->
-            <Frame Grid.Row="2" CornerRadius="20" HasShadow="True" BackgroundColor="#FF9800">
-                <Grid Padding="15">
-                    <Button Text="Otomat Takip"
-                            FontSize="24"
-                            FontAttributes="Bold"
-                            TextColor="White"
-                            BackgroundColor="Transparent"
-                            Clicked="OnOtomatTakipClicked"/>
-                </Grid>
+            <Frame CornerRadius="15" HasShadow="True" BackgroundColor="#FF9800">
+                <Button Text="Otomat Takip"
+                        FontSize="22"
+                        FontAttributes="Bold"
+                        TextColor="White"
+                        BackgroundColor="Transparent"
+                        Clicked="OnOtomatTakipClicked"/>
             </Frame>
 
             <!-- Raporlar Kartı -->
-            <Frame Grid.Row="3" CornerRadius="20" HasShadow="True" BackgroundColor="#9C27B0">
-                <Grid Padding="15">
-                    <Button Text="Raporlar"
-                            FontSize="24"
-                            FontAttributes="Bold"
-                            TextColor="White"
-                            BackgroundColor="Transparent"
-                            Clicked="OnRaporlarClicked"/>
-                </Grid>
+            <Frame CornerRadius="15" HasShadow="True" BackgroundColor="#9C27B0">
+                <Button Text="Raporlar"
+                        FontSize="22"
+                        FontAttributes="Bold"
+                        TextColor="White"
+                        BackgroundColor="Transparent"
+                        Clicked="OnRaporlarClicked"/>
             </Frame>
 
             <!-- Ayarlar Kartı -->
-            <Frame Grid.Row="4" CornerRadius="20" HasShadow="True" BackgroundColor="#000000">
-                <Grid Padding="15">
-                    <Button Text="Ayarlar"
-                            FontSize="24"
-                            FontAttributes="Bold"
-                            TextColor="White"
-                            BackgroundColor="Transparent"
-                            Clicked="OnAyarlarClicked"/>
-                </Grid>
+            <Frame CornerRadius="15" HasShadow="True" BackgroundColor="#37474F">
+                <Button Text="Ayarlar"
+                        FontSize="22"
+                        FontAttributes="Bold"
+                        TextColor="White"
+                        BackgroundColor="Transparent"
+                        Clicked="OnAyarlarClicked"/>
             </Frame>
-        </Grid>
+
+        </StackLayout>
     </ScrollView>
 </ContentPage>
