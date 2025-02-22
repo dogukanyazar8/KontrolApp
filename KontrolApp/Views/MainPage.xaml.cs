@@ -1,6 +1,7 @@
 ﻿using Supabase;
 using Microsoft.Maui.Controls;
 using System;
+using KontrolApp.Views;
 
 namespace KontrolApp
 {
@@ -14,7 +15,7 @@ namespace KontrolApp
 
         private async void OnHatTakipClicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new HatTakipPage());
+            await Navigation.PushAsync(new HatTakipLoginPage());
         }
 
         private async void OnKesimTakipClicked(object sender, EventArgs e)
@@ -24,7 +25,7 @@ namespace KontrolApp
 
         private async void OnOtomatTakipClicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new OtomatTakipPage());
+            await Navigation.PushAsync(new OtomatTakipLoginPage());
         }
 
         private async void OnRaporlarClicked(object sender, EventArgs e)

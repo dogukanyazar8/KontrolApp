@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using KontrolApp.Services;
+using Microsoft.Extensions.Logging;
 
 namespace KontrolApp
 {
@@ -6,6 +7,7 @@ namespace KontrolApp
     {
         public static MauiApp CreateMauiApp()
         {
+            AppContext.SetSwitch("System.Reflection.NullabilityInfoContext.IsSupported", true);
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
@@ -17,6 +19,7 @@ namespace KontrolApp
 
 #if DEBUG
     		builder.Logging.AddDebug();
+            builder.Services.AddSingleton<AuthenticationService>();
 #endif
 
             return builder.Build();
