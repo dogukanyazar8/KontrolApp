@@ -112,6 +112,9 @@
 	  <MauiXaml Update="Views\HatTakipLoginPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\KesimTakipLoginPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\KesimTakipPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

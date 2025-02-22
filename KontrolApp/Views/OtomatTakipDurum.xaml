@@ -2,31 +2,31 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="KontrolApp.Views.OtomatTakipDurum"
-             BackgroundColor="#F5F5F5">
+             BackgroundColor="#FFF3E0">
 
     <ScrollView>
-        <StackLayout Padding="30" Spacing="20" VerticalOptions="CenterAndExpand">
+        <StackLayout Padding="25" Spacing="18" VerticalOptions="CenterAndExpand">
 
             <!-- Üretim Ekle Başlığı -->
             <Label Text="Üretim Ekle" 
-                   FontSize="26" 
+                   FontSize="28" 
                    FontAttributes="Bold"
                    HorizontalOptions="Center"
-                   TextColor="#37474F"/>
+                   TextColor="#E65100"/>
 
             <!-- Seçilen Otomat Bilgisi -->
-            <Frame BackgroundColor="White" Padding="15" HasShadow="True" CornerRadius="10">
+            <Frame BackgroundColor="White" Padding="20" HasShadow="True" >
                 <Label x:Name="OtomatBilgiLabel"
                        FontSize="20"
-                       TextColor="#37474F"/>
+                       TextColor="#BF360C"/>
             </Frame>
 
             <!-- Sipariş Numarası Seçimi -->
             <Label Text="Sipariş Numarası" 
                    FontSize="18"
                    FontAttributes="Bold"
-                   TextColor="#37474F"/>
-            <Border Stroke="#B0BEC5" StrokeThickness="2" Padding="8" BackgroundColor="White">
+                   TextColor="#BF360C"/>
+            <Border Stroke="#FF9800" StrokeThickness="2" Padding="10" BackgroundColor="White" >
                 <Picker x:Name="SiparisNoPicker"
                         Title="Sipariş Numarası Seçin"
                         FontSize="18"
@@ -39,39 +39,81 @@
                    Text="Model"
                    FontSize="18"
                    FontAttributes="Bold"
-                   TextColor="#37474F"/>
+                   TextColor="#BF360C"/>
 
             <!-- Başlangıç Tarihi -->
             <Label Text="Başlangıç Tarihi" 
                    FontSize="18"
                    FontAttributes="Bold"
-                   TextColor="#37474F"/>
-            <Border Stroke="#B0BEC5" StrokeThickness="2" Padding="8" BackgroundColor="#E0E0E0">
+                   TextColor="#BF360C"/>
+            <Border Stroke="#FF9800" StrokeThickness="2" Padding="10" BackgroundColor="#FFE0B2" >
                 <Label x:Name="BaslangicTarihiLabel"
                        FontSize="18"
                        TextColor="Black"/>
             </Border>
 
-            <!-- Başlangıç Saati -->
-            <Label Text="Başlangıç Saati" 
-                   FontSize="18"
-                   FontAttributes="Bold"
-                   TextColor="#37474F"/>
-            <Border Stroke="#B0BEC5" StrokeThickness="2" Padding="8" BackgroundColor="White">
-                <TimePicker x:Name="BaslangicSaatiPicker"
-                            FontSize="18"
-                            TextColor="Black"/>
+        
+           
+
+            <!-- Başlangıç ve Bitiş Saatleri -->
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                <StackLayout Grid.Column="0">
+                    <Label Text="Başlangıç Saati" 
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="#BF360C"/>
+                    <Border Stroke="#FF9800" StrokeThickness="2" Padding="10" BackgroundColor="White" >
+                        <TimePicker x:Name="BaslangicSaatiPicker"
+                                    FontSize="18"
+                                    TextColor="Black"
+                                    HorizontalOptions="FillAndExpand"
+                                    Format="HH:mm"
+                                    Time="18:30"/>
+                    </Border>
+                </StackLayout>
+                <StackLayout Grid.Column="1">
+                    <Label Text="Bitiş Saati" 
+                           FontSize="18"
+                           FontAttributes="Bold"
+                           TextColor="#BF360C"/>
+                    <Border Stroke="#FF9800" StrokeThickness="2" Padding="10" BackgroundColor="White" >
+                        <TimePicker x:Name="BitisSaatiPicker"
+                                    FontSize="18"
+                                    TextColor="Black"
+                                    Time="18:30"
+                                    Format="HH:mm"
+                                    HorizontalOptions="FillAndExpand"/>
+                    </Border>
+                </StackLayout>
+            </Grid>
+            
+            
+            <!-- Üretim Girişi Alanı -->
+
+
+            <Label Text="Üretim Miktarı" 
+        FontSize="18"
+        FontAttributes="Bold"
+        TextColor="#BF360C"/>
+            <Border Stroke="#FF9800" StrokeThickness="2" Padding="10" BackgroundColor="White" >
+                <Entry x:Name="UretimMiktariEntry"
+            Placeholder="Üretim miktarını girin"
+            FontSize="18"
+            Keyboard="Numeric"
+            TextColor="Black"/>
             </Border>
+
 
             <!-- Güncelle Butonu -->
             <Button Text="Güncelle"
                     Clicked="OnGuncelleClicked"
-                    BackgroundColor="#4CAF50"
+                    BackgroundColor="#388E3C"
                     TextColor="White"
                     FontSize="18"
-                    Padding="12"
+                    Padding="14"
                     HorizontalOptions="Fill"
-                    CornerRadius="8"/>
+                    CornerRadius="10"
+                   />
         </StackLayout>
     </ScrollView>
 </ContentPage>
