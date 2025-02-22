@@ -2,48 +2,54 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="KontrolApp.Views.OtomatTakipLoginPage"
-             NavigationPage.HasNavigationBar="False">
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="#F5F5F5">
 
-    <ScrollView>
-        <StackLayout Padding="30" Spacing="30" VerticalOptions="Center">
-            <Frame CornerRadius="10" HasShadow="True" BackgroundColor="White">
-                <Label 
-                Text="Otomat Takip Ekranı"
-                FontSize="25"
-                FontAttributes="Bold"
-                Margin="5"
-                VerticalOptions="Center" 
-                HorizontalOptions="Center" />
-            </Frame>
+    <StackLayout Padding="30" Spacing="20" VerticalOptions="Center">
 
-            <Frame CornerRadius="10" HasShadow="True" BackgroundColor="White">
-                <Entry x:Name="UserEntry"
-               Placeholder="Kullanıcı Adı"
-               Keyboard="Email"
-               TextColor="Black"
-               FontSize="20"        
-               BackgroundColor="Transparent"
-               Margin="5"/>
-            </Frame>
+        <!-- Başlık -->
+        <Label Text="Otomat Takip Girişi" 
+               FontSize="26" 
+               FontAttributes="Bold"
+               HorizontalOptions="Center"
+               TextColor="#37474F"/>
 
-            <Frame CornerRadius="10" HasShadow="True" BackgroundColor="White">
-                <Entry x:Name="PasswordEntry"
-               Placeholder="Şifre"
-               IsPassword="True"
-               TextColor="Black"
-               FontSize="20"       
-               BackgroundColor="Transparent"
-               Margin="5"/>
-            </Frame>
+        <!-- Kullanıcı Adı Girişi -->
+        <Border Stroke="#B0BEC5" StrokeThickness="2" Padding="8" BackgroundColor="White">
+            <Entry x:Name="UsernameEntry" 
+                   Placeholder="Kullanıcı Adı"
+                   FontSize="18"
+                   BackgroundColor="Transparent"
+                   TextColor="Black"/>
+        </Border>
 
-            <Button Text="Giriş Yap"
-              BackgroundColor="#0078D7"
-              TextColor="White"
-              CornerRadius="10"
-              HeightRequest="60"
-              FontSize="24"
-              FontAttributes="Bold"
-              Clicked="OnLoginClicked"/>
-        </StackLayout>
-    </ScrollView>
+        <!-- Şifre Girişi -->
+        <Border Stroke="#B0BEC5" StrokeThickness="2" Padding="8" BackgroundColor="White">
+            <Entry x:Name="PasswordEntry" 
+                   Placeholder="Şifre"
+                   IsPassword="True"
+                   FontSize="18"
+                   BackgroundColor="Transparent"
+                   TextColor="Black"/>
+        </Border>
+
+        <!-- Hata Mesajı -->
+        <Label x:Name="LoginErrorLabel" 
+               Text=""
+               FontSize="14"
+               TextColor="Red"
+               HorizontalOptions="Center"
+               IsVisible="False"/>
+
+        <!-- Giriş Yap Butonu -->
+        <Button Text="Giriş Yap"
+                Clicked="OnLoginClicked"
+                BackgroundColor="#4CAF50"
+                TextColor="White"
+                FontSize="18"
+                Padding="12"
+                HorizontalOptions="Fill"
+                CornerRadius="8"/>
+
+    </StackLayout>
 </ContentPage>

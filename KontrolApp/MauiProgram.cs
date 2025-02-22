@@ -19,7 +19,7 @@ namespace KontrolApp
 
 #if DEBUG
     		builder.Logging.AddDebug();
-            builder.Services.AddSingleton<AuthenticationService>();
+            builder.Services.AddSingleton<SupabaseAuthService>();
 #endif
 
             return builder.Build();

@@ -4,46 +4,44 @@
              x:Class="KontrolApp.HatTakipLoginPage"
              NavigationPage.HasNavigationBar="False">
 
-    <ScrollView>
-        <StackLayout Padding="30" Spacing="30" VerticalOptions="Center">
-            <Frame CornerRadius="10" HasShadow="True" BackgroundColor="White">
-                <Label 
-                Text="Hat Takip Ekranı"
-                FontSize="25"
-                FontAttributes="Bold"
-                Margin="5"
-                VerticalOptions="Center" 
-                HorizontalOptions="Center" />
-            </Frame>
+    <StackLayout Padding="20" Spacing="15">
+        <!-- Başlık -->
+        <Label Text="Otomat Takip Girişi" 
+               FontSize="24" 
+               FontAttributes="Bold"
+               HorizontalOptions="Center"
+               TextColor="#37474F"/>
 
-            <Frame CornerRadius="10" HasShadow="True" BackgroundColor="White">
-                <Entry x:Name="UserEntry"
+        <!-- Kullanıcı Adı Girişi -->
+        <Entry x:Name="UsernameEntry" 
                Placeholder="Kullanıcı Adı"
-               Keyboard="Email"
-               TextColor="Black"
-               FontSize="20"        
-               BackgroundColor="Transparent"
-               Margin="5"/>
-            </Frame>
+               FontSize="18"
+               BackgroundColor="White"
+               TextColor="Black"/>
 
-            <Frame CornerRadius="10" HasShadow="True" BackgroundColor="White">
-                <Entry x:Name="PasswordEntry"
+        <!-- Şifre Girişi -->
+        <Entry x:Name="PasswordEntry" 
                Placeholder="Şifre"
                IsPassword="True"
-               TextColor="Black"
-               FontSize="20"       
-               BackgroundColor="Transparent"
-               Margin="5"/>
-            </Frame>
+               FontSize="18"
+               BackgroundColor="White"
+               TextColor="Black"/>
 
-            <Button Text="Giriş Yap"
-              BackgroundColor="#0078D7"
-              TextColor="White"
-              CornerRadius="10"
-              HeightRequest="60"
-              FontSize="24"
-              FontAttributes="Bold"
-              Clicked="OnLoginClicked"/>
-        </StackLayout>
-    </ScrollView>
+        <!-- Giriş Yap Butonu -->
+        <Button Text="Giriş Yap"
+                Clicked="OnLoginClicked"
+                BackgroundColor="#4CAF50"
+                TextColor="White"
+                FontSize="18"
+                Padding="10"
+                HorizontalOptions="Fill"/>
+
+        <!-- Giriş Hatası -->
+        <Label x:Name="LoginErrorLabel" 
+               Text=""
+               FontSize="14"
+               TextColor="Red"
+               HorizontalOptions="Center"
+               IsVisible="False"/>
+    </StackLayout>
 </ContentPage>

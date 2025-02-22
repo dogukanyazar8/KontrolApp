@@ -4,27 +4,40 @@ namespace KontrolApp.Views;
 
 public partial class OtomatTakipLoginPage : ContentPage
 {
-    private readonly AuthenticationService _authService = new AuthenticationService();
+    private SupabaseAuthService _authService = new SupabaseAuthService();
+
+    private const string TableName = "users_otomatTakip";
+    private const string UsernameColumn = "user_name";
+    private const string PasswordColumn = "user_password";
+
     public OtomatTakipLoginPage()
-	{
-		InitializeComponent();
-	}
+    {
+        InitializeComponent();
+    }
+
     private async void OnLoginClicked(object sender, EventArgs e)
     {
-        string username = UserEntry.Text?.Trim();
-        string password = PasswordEntry.Text?.Trim();
-        string tableName = "users_otomatTakip"; // Kullanýlacak tablo adýný belirtiyoruz
+        string username = UsernameEntry.Text;
+        string password = PasswordEntry.Text;
 
-        bool isLoggedIn = await _authService.LoginAsync(tableName, username, password);
-
-        if (isLoggedIn)
+        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
         {
-            await DisplayAlert("Hoþgeldiniz", $"Merhaba {username}!", "Tamam");
+            LoginErrorLabel.Text = "Kullanýcý adý ve þifre boþ olamaz.";
+            LoginErrorLabel.IsVisible = true;
+            return;
+        }
+
+        bool loginSuccess = await _authService.LoginAsync(TableName, UsernameColumn, PasswordColumn, username, password);
+
+        if (loginSuccess)
+        {
+            await DisplayAlert("Baþarýlý", "Giriþ baþarýlý!", "Tamam");
             await Navigation.PushAsync(new OtomatTakipPage());
         }
         else
         {
-            await DisplayAlert("Hata", "Kullanýcý adý veya þifre hatalý.", "Tamam");
+            LoginErrorLabel.Text = "Hatalý kullanýcý adý veya þifre.";
+            LoginErrorLabel.IsVisible = true;
         }
     }
 }
