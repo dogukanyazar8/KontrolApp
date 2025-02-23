@@ -29,7 +29,7 @@
                   HasUnevenRows="True"
                   VerticalOptions="FillAndExpand"
                   IsPullToRefreshEnabled="True"
-                  Refreshing="MachinesList_Refreshing">
+                 >
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>

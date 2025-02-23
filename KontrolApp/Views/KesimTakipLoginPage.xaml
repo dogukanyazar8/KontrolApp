@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="KontrolApp.Views.KesimTakipLoginPage"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="#F5F5F5">
+
+    <StackLayout Padding="30" Spacing="20" VerticalOptions="Center">
+
+        <!-- Başlık -->
+        <Label Text="Kesim Takip Girişi" 
+               FontSize="26" 
+               FontAttributes="Bold"
+               HorizontalOptions="Center"
+               TextColor="#37474F"/>
+
+        <!-- Kullanıcı Adı Girişi -->
+        <Border Stroke="#B0BEC5" StrokeThickness="2" Padding="8" BackgroundColor="White">
+            <Entry x:Name="UsernameEntry" 
+                   Placeholder="Kullanıcı Adı"
+                   FontSize="18"
+                   BackgroundColor="Transparent"
+                   TextColor="Black"/>
+        </Border>
+
+        <!-- Şifre Girişi -->
+        <Border Stroke="#B0BEC5" StrokeThickness="2" Padding="8" BackgroundColor="White">
+            <Entry x:Name="PasswordEntry" 
+                   Placeholder="Şifre"
+                   IsPassword="True"
+                   FontSize="18"
+                   BackgroundColor="Transparent"
+                   TextColor="Black"/>
+        </Border>
+
+        <!-- Hata Mesajı -->
+        <Label x:Name="LoginErrorLabel" 
+               Text=""
+               FontSize="14"
+               TextColor="Red"
+               HorizontalOptions="Center"
+               IsVisible="False"/>
+
+        <!-- Giriş Yap Butonu -->
+        <Button Text="Giriş Yap"
+                Clicked="OnLoginClicked"
+                BackgroundColor="#4CAF50"
+                TextColor="White"
+                FontSize="18"
+                Padding="12"
+                HorizontalOptions="Fill"
+                CornerRadius="8"/>
+
+    </StackLayout>
+</ContentPage>

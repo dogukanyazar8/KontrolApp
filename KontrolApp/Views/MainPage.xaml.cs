@@ -20,7 +20,7 @@ namespace KontrolApp
 
         private async void OnKesimTakipClicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new KesimTakipPage());
+            await Navigation.PushAsync(new KesimTakipLoginPage());
         }
 
         private async void OnOtomatTakipClicked(object sender, EventArgs e)
