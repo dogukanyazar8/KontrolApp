@@ -1,16 +1,16 @@
-using KontrolApp.Services;
+ï»¿using KontrolApp.Services;
 
 namespace KontrolApp.Views;
 
 public partial class OtomatTakipDurum : ContentPage
 {
     private SupabaseService _supabaseService = new SupabaseService();
-    private const string MakineTable = "makineListesi"; // Güncellenecek tablo
-    private const string SiparisTable = "extreme_siparisler"; // Yeni tablo adý
-    private const string NoColumn = "extreme_order_no"; // Sipariþ numarasý kolonu
+    private const string MakineTable = "makineListesi"; // GÃ¼ncellenecek tablo
+    private const string SiparisTable = "extreme_siparisler"; // Yeni tablo adÄ±
+    private const string NoColumn = "extreme_order_no"; // SipariÅŸ numarasÄ± kolonu
     private const string ColorColumn = "renk"; // Renk kolonu
     private const string ModelColumn = "model_kodu"; // Model kolonu
-    private const string QuantityColumn = "planlanan_kesim_adeti"; // Sipariþ miktarý kolonu
+    private const string QuantityColumn = "planlanan_kesim_adeti"; // SipariÅŸ miktarÄ± kolonu
     private const string StatusColumn = "otomat_durumu";
 
     private string _selectedOtomatName;
@@ -26,78 +26,116 @@ public partial class OtomatTakipDurum : ContentPage
         _selectedOtomatName = otomatName;
         _selectedDateTime = DateTime.Now;
 
-        // Seçilen otomatýn bilgisini göster
-        OtomatBilgiLabel.Text = $"Makine Adý: {_selectedOtomatName}";
+        // SeÃ§ilen otomatÄ±n bilgisini gÃ¶ster
+        OtomatBilgiLabel.Text = $"Makine AdÄ±: {_selectedOtomatName}";
 
-        // Baþlangýç tarihi ve saati ayarla
-        BaslangicTarihiLabel.Text = _selectedDateTime.ToString("dd MMMM yyyy"); // Deðiþtirilemez
-        BaslangicSaatiPicker.Time = _selectedDateTime.TimeOfDay; // Kullanýcý deðiþtirebilir
+        // BaÅŸlangÄ±Ã§ tarihi ve saati ayarla
+        BaslangicTarihiLabel.Text = _selectedDateTime.ToString("dd MMMM yyyy"); // DeÄŸiÅŸtirilemez
+        BaslangicSaatiPicker.Time = _selectedDateTime.TimeOfDay; // KullanÄ±cÄ± deÄŸiÅŸtirebilir
 
-        // Varsayýlan olarak Sipariþ Modeli etiketi "Model" olacak
+        // VarsayÄ±lan olarak SipariÅŸ Modeli etiketi "Model" olacak
         SiparisModelLabel.Text = "Model";
 
-        // Sipariþ numaralarýný yükle
+        // SipariÅŸ numaralarÄ±nÄ± yÃ¼kle
         LoadSiparisNo();
     }
 
     private async void LoadSiparisNo()
     {
-        var siparisList = await _supabaseService.GetDataAsync(SiparisTable, "id", new[] { NoColumn, ColorColumn, ModelColumn, QuantityColumn });
+        var otomatData = await _supabaseService.GetDataAsync(MakineTable, "id",
+            new[] { "id", StatusColumn, "siparis_no", "renk", "model_adi", "siparis_adet" });
 
-        if (siparisList != null && siparisList.Count > 0)
+        if (otomatData == null || otomatData.Count == 0)
+            return;
+
+        var otomat = otomatData.FirstOrDefault(o =>
+            o.ContainsKey("id") && o["id"] != null &&
+            o["id"].ToString().Trim() == _selectedOtomatId.ToString());
+
+        if (otomat == null)
+            return;
+
+        string otomatDurumu = otomat.ContainsKey(StatusColumn) && otomat[StatusColumn] != null
+            ? otomat[StatusColumn].ToString().Trim()
+            : "";
+
+        if (string.Equals(otomatDurumu, "Devam Ediyor", StringComparison.OrdinalIgnoreCase))
         {
-            _siparisBilgiMapping.Clear();
-            SiparisNoPicker.Items.Clear();
+            string siparisNo = otomat.ContainsKey("siparis_no") && otomat["siparis_no"] != null ? otomat["siparis_no"].ToString().Trim() : "";
+            string renk = otomat.ContainsKey("renk") && otomat["renk"] != null ? otomat["renk"].ToString().Trim() : "";
+            string modelAdi = otomat.ContainsKey("model_adi") && otomat["model_adi"] != null ? otomat["model_adi"].ToString().Trim() : "";
+            int siparisMiktar = otomat.ContainsKey("siparis_adet") && otomat["siparis_adet"] != null ? Convert.ToInt32(otomat["siparis_adet"]) : 0;
 
-            foreach (var siparis in siparisList)
+            if (!string.IsNullOrEmpty(siparisNo) && !string.IsNullOrEmpty(renk))
             {
-                if (siparis.ContainsKey(NoColumn) && siparis.ContainsKey(ColorColumn) && siparis.ContainsKey(ModelColumn) && siparis.ContainsKey(QuantityColumn))
-                {
-                    string siparisNo = siparis[NoColumn]?.ToString();
-                    string renk = siparis[ColorColumn]?.ToString();
-                    string siparisModel = siparis[ModelColumn]?.ToString();
-                    int siparisMiktar = siparis.ContainsKey(QuantityColumn) ? Convert.ToInt32(siparis[QuantityColumn]) : 0;
+                string comboboxText = $"{siparisNo} - {renk}";
+                SiparisNoPicker.Items.Clear();
+                SiparisNoPicker.Items.Add(comboboxText);
+                SiparisNoPicker.SelectedIndex = 0;
+                SiparisNoPicker.IsEnabled = false;
+            }
 
-                    if (!string.IsNullOrEmpty(siparisNo) && !string.IsNullOrEmpty(renk))
-                    {
-                        string comboboxText = $"{siparisNo} - {renk}";
-                        _siparisBilgiMapping[comboboxText] = (siparisModel, siparisMiktar);
-                        SiparisNoPicker.Items.Add(comboboxText);
-                    }
+            SiparisModelLabel.Text = $"SipariÅŸ Modeli: {modelAdi}";
+            UretimMiktariLabel.Text = $"Ãœretim MiktarÄ± [ SipariÅŸ MiktarÄ±: {siparisMiktar} ]";
+            return;
+        }
+
+        var siparisList = await _supabaseService.GetDataAsync(SiparisTable, "id",
+            new[] { NoColumn, ColorColumn, ModelColumn, QuantityColumn });
+
+        if (siparisList == null || siparisList.Count == 0)
+            return;
+
+        _siparisBilgiMapping.Clear();
+        SiparisNoPicker.Items.Clear();
+
+        foreach (var siparis in siparisList)
+        {
+            if (siparis.ContainsKey(NoColumn) && siparis[NoColumn] != null &&
+                siparis.ContainsKey(ColorColumn) && siparis[ColorColumn] != null &&
+                siparis.ContainsKey(ModelColumn) && siparis[ModelColumn] != null &&
+                siparis.ContainsKey(QuantityColumn) && siparis[QuantityColumn] != null)
+            {
+                string siparisNo = siparis[NoColumn]?.ToString().Trim();
+                string renk = siparis[ColorColumn]?.ToString().Trim();
+                string siparisModel = siparis[ModelColumn]?.ToString().Trim();
+                int siparisMiktar = Convert.ToInt32(siparis[QuantityColumn]);
+
+                if (!string.IsNullOrEmpty(siparisNo) && !string.IsNullOrEmpty(renk))
+                {
+                    string comboboxText = $"{siparisNo} - {renk}";
+                    _siparisBilgiMapping[comboboxText] = (siparisModel, siparisMiktar);
+                    SiparisNoPicker.Items.Add(comboboxText);
                 }
             }
         }
-    }
 
-    private void OnSiparisNoSelected(object sender, EventArgs e)
-    {
-        if (SiparisNoPicker.SelectedItem != null)
+        SiparisNoPicker.IsEnabled = true;
+        SiparisNoPicker.SelectedIndexChanged += (sender, e) =>
         {
-            string selectedText = SiparisNoPicker.SelectedItem.ToString();
-
-            if (_siparisBilgiMapping.ContainsKey(selectedText))
+            if (SiparisNoPicker.SelectedItem != null)
             {
-                var siparisBilgi = _siparisBilgiMapping[selectedText];
-
-                // Sipariþ Modelini güncelle
-                SiparisModelLabel.Text = $"Sipariþ Modeli: {siparisBilgi.model}";
-
-                // Üretim Miktarý baþlýðýný güncelle
-                UretimMiktariLabel.Text = $"Üretim Miktarý [ Sipariþ Miktarý: {siparisBilgi.miktar} ]";
+                string selectedText = SiparisNoPicker.SelectedItem.ToString();
+                if (_siparisBilgiMapping.ContainsKey(selectedText))
+                {
+                    var siparisBilgi = _siparisBilgiMapping[selectedText];
+                    SiparisModelLabel.Text = $"SipariÅŸ Modeli: {siparisBilgi.model}";
+                    UretimMiktariLabel.Text = $"Ãœretim MiktarÄ± [ SipariÅŸ MiktarÄ±: {siparisBilgi.miktar} ]";
+                }
             }
-        }
-        else
-        {
-            SiparisModelLabel.Text = "Model";
-            UretimMiktariLabel.Text = "Üretim Miktarý";
-        }
+            else
+            {
+                SiparisModelLabel.Text = "Model";
+                UretimMiktariLabel.Text = "Ãœretim MiktarÄ±";
+            }
+        };
     }
     private async void OnGuncelleClicked(object sender, EventArgs e)
     {
         string selectedText = SiparisNoPicker.SelectedItem?.ToString();
         if (string.IsNullOrEmpty(selectedText))
         {
-            await DisplayAlert("Hata", "Lütfen bir sipariþ numarasý seçin!", "Tamam");
+            await DisplayAlert("Hata", "LÃ¼tfen bir sipariÅŸ numarasÄ± seÃ§in!", "Tamam");
             return;
         }
 
@@ -107,22 +145,22 @@ public partial class OtomatTakipDurum : ContentPage
         string selectedModel = _siparisBilgiMapping.ContainsKey(selectedText) ? _siparisBilgiMapping[selectedText].model : null;
         int planlananMiktar = _siparisBilgiMapping.ContainsKey(selectedText) ? _siparisBilgiMapping[selectedText].miktar : 0;
 
-        // Üretim miktarýný kontrol et
+        // Ãœretim miktarÄ±nÄ± kontrol et
         if (!int.TryParse(UretimMiktariEntry.Text, out int uretimMiktari))
         {
-            await DisplayAlert("Hata", "Lütfen geçerli bir üretim miktarý girin!", "Tamam");
+            await DisplayAlert("Hata", "LÃ¼tfen geÃ§erli bir Ã¼retim miktarÄ± girin!", "Tamam");
             return;
         }
 
         if (uretimMiktari <= 0)
         {
-            await DisplayAlert("Hata", "Üretim miktarý negatif veya sýfýr olamaz!", "Tamam");
+            await DisplayAlert("Hata", "Ãœretim miktarÄ± negatif veya sÄ±fÄ±r olamaz!", "Tamam");
             return;
         }
 
         if (uretimMiktari > planlananMiktar)
         {
-            await DisplayAlert("Hata", $"Üretim miktarý, planlanan sipariþ miktarýndan fazla olamaz! (Maksimum: {planlananMiktar})", "Tamam");
+            await DisplayAlert("Hata", $"Ãœretim miktarÄ±, planlanan sipariÅŸ miktarÄ±ndan fazla olamaz! (Maksimum: {planlananMiktar})", "Tamam");
             return;
         }
 
@@ -132,11 +170,11 @@ public partial class OtomatTakipDurum : ContentPage
 
         if (bitisSaati <= baslangicSaati)
         {
-            await DisplayAlert("Hata", "Bitiþ saati, baþlangýç saatinden önce veya ayný olamaz!", "Tamam");
+            await DisplayAlert("Hata", "BitiÅŸ saati, baÅŸlangÄ±Ã§ saatinden Ã¶nce veya aynÄ± olamaz!", "Tamam");
             return;
         }
 
-        // ? `makineListesi` tablosunu güncelle
+        // ? `makineListesi` tablosunu gÃ¼ncelle
         var updateData = new Dictionary<string, object>
     {
         { "otomat_durumu", "Devam Ediyor" },
@@ -151,19 +189,19 @@ public partial class OtomatTakipDurum : ContentPage
 
         if (updateSuccess)
         {
-            await DisplayAlert("Baþarýlý", $"Otomat '{_selectedOtomatName}' durumu güncellendi!\n\nSipariþ No: {selectedNo}\nModel: {selectedModel}\nSipariþ Adet: {planlananMiktar}\nÜretim Miktarý: {uretimMiktari}\nBaþlangýç Saati: {baslangicSaati}", "Tamam");
+            await DisplayAlert("BaÅŸarÄ±lÄ±", $"Otomat '{_selectedOtomatName}' durumu gÃ¼ncellendi!\n\nSipariÅŸ No: {selectedNo}\nModel: {selectedModel}\nSipariÅŸ Adet: {planlananMiktar}\nÃœretim MiktarÄ±: {uretimMiktari}\nBaÅŸlangÄ±Ã§ Saati: {baslangicSaati}", "Tamam");
 
-            // ? `RefreshData()` çaðrýlýyor
+            // ? `RefreshData()` Ã§aÄŸrÄ±lÄ±yor
             if (Application.Current.MainPage.Navigation.NavigationStack.OfType<OtomatTakipPage>().FirstOrDefault() is OtomatTakipPage takipPage)
             {
                 await takipPage.RefreshData(); // ? Listeyi yenile
             }
 
-            await Navigation.PopAsync(); // Sayfayý kapat
+            await Navigation.PopAsync(); // SayfayÄ± kapat
         }
         else
         {
-            await DisplayAlert("Hata", "Güncelleme baþarýsýz!", "Tamam");
+            await DisplayAlert("Hata", "GÃ¼ncelleme baÅŸarÄ±sÄ±z!", "Tamam");
         }
     }
 }

@@ -30,8 +30,7 @@
                 <Picker x:Name="SiparisNoPicker"
                         Title="Sipariş Numarası Seçin"
                         FontSize="18"
-                        TextColor="Black"
-                        SelectedIndexChanged="OnSiparisNoSelected"/>
+                        TextColor="Black"/>
             </Border>
 
             <!-- Seçilen Siparişin Modeli -->
