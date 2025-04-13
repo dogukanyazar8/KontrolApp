@@ -94,5 +94,16 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        <!-- Otomatları Kapat Butonu -->
+        <Button Text="Otomatları Kapat"
+        Clicked="OnOtomatlariKapatClicked"
+        BackgroundColor="#D32F2F"
+        TextColor="White"
+        FontSize="16"
+        FontAttributes="Bold"
+        Padding="12"
+        Margin="10,20,10,10"
+        CornerRadius="8"
+        HorizontalOptions="Fill"/>
     </StackLayout>
 </ContentPage>

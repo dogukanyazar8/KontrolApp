@@ -145,16 +145,9 @@ public partial class OtomatTakipDurum : ContentPage
         string selectedModel = _siparisBilgiMapping.ContainsKey(selectedText) ? _siparisBilgiMapping[selectedText].model : null;
         int planlananMiktar = _siparisBilgiMapping.ContainsKey(selectedText) ? _siparisBilgiMapping[selectedText].miktar : 0;
 
-        // Üretim miktarını kontrol et
-        if (!int.TryParse(UretimMiktariEntry.Text, out int uretimMiktari))
+        if (!int.TryParse(UretimMiktariEntry.Text, out int uretimMiktari) || uretimMiktari <= 0)
         {
-            await DisplayAlert("Hata", "Lütfen geçerli bir üretim miktarı girin!", "Tamam");
-            return;
-        }
-
-        if (uretimMiktari <= 0)
-        {
-            await DisplayAlert("Hata", "Üretim miktarı negatif veya sıfır olamaz!", "Tamam");
+            await DisplayAlert("Hata", "Lütfen geçerli ve pozitif bir üretim miktarı girin!", "Tamam");
             return;
         }
 
@@ -164,7 +157,6 @@ public partial class OtomatTakipDurum : ContentPage
             return;
         }
 
-        // Saat kontrolleri
         TimeSpan baslangicSaati = BaslangicSaatiPicker.Time;
         TimeSpan bitisSaati = BitisSaatiPicker.Time;
 
@@ -174,7 +166,9 @@ public partial class OtomatTakipDurum : ContentPage
             return;
         }
 
-        // ? `makineListesi` tablosunu güncelle
+        string baslangicTarihi = BaslangicTarihiLabel.Text;
+        string bitisTarihi = DateTime.Now.Date.Add(bitisSaati).ToString("yyyy-MM-dd HH:mm:ss");
+
         var updateData = new Dictionary<string, object>
     {
         { "otomat_durumu", "Devam Ediyor" },
@@ -189,15 +183,46 @@ public partial class OtomatTakipDurum : ContentPage
 
         if (updateSuccess)
         {
-            await DisplayAlert("Başarılı", $"Otomat '{_selectedOtomatName}' durumu güncellendi!\n\nSipariş No: {selectedNo}\nModel: {selectedModel}\nSipariş Adet: {planlananMiktar}\nÜretim Miktarı: {uretimMiktari}\nBaşlangıç Saati: {baslangicSaati}", "Tamam");
+            var uretimData = new Dictionary<string, object>
+        {
+            { "id", _selectedOtomatId },
+            { "otomat_adi", _selectedOtomatName },
+            { "siparis_no", selectedNo },
+            { "siparis_model", selectedModel },
+            { "uretim_adeti", uretimMiktari },
+            { "baslangic_tarihi", baslangicTarihi },
+            { "bitis_tarihi", bitisTarihi }
+        };
 
-            // ? `RefreshData()` çağrılıyor
-            if (Application.Current.MainPage.Navigation.NavigationStack.OfType<OtomatTakipPage>().FirstOrDefault() is OtomatTakipPage takipPage)
+            // [✓] otomatUretim tablosunda kayıt var mı kontrol et
+            var mevcutKayitlar = await _supabaseService.GetDataAsync("otomatUretim", "id", new[] { "id" });
+            bool kayitVar = mevcutKayitlar.Any(x => x.ContainsKey("id") && Convert.ToInt32(x["id"]) == _selectedOtomatId);
+
+            bool uretimUpdateSuccess;
+            if (kayitVar)
             {
-                await takipPage.RefreshData(); // ? Listeyi yenile
+                uretimUpdateSuccess = await _supabaseService.UpdateDataAsync("otomatUretim", "id", _selectedOtomatId, uretimData);
+            }
+            else
+            {
+                uretimUpdateSuccess = await _supabaseService.InsertDataAsync("otomatUretim", uretimData);
             }
 
-            await Navigation.PopAsync(); // Sayfayı kapat
+            if (uretimUpdateSuccess)
+            {
+                await DisplayAlert("Başarılı", $"Otomat üretim verileri kaydedildi.\n\nSipariş No: {selectedNo}\nModel: {selectedModel}\nÜretim: {uretimMiktari}\nBaşlangıç: {baslangicTarihi}\nBitiş: {bitisTarihi}", "Tamam");
+            }
+            else
+            {
+                await DisplayAlert("Hata", "Üretim verileri otomatUretim tablosuna kaydedilemedi!", "Tamam");
+            }
+
+            if (Application.Current.MainPage.Navigation.NavigationStack.OfType<OtomatTakipPage>().FirstOrDefault() is OtomatTakipPage takipPage)
+            {
+                await takipPage.RefreshData();
+            }
+
+            await Navigation.PopAsync();
         }
         else
         {

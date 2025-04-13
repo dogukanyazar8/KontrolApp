@@ -97,5 +97,21 @@ namespace KontrolApp.Services
                 return false;
             }
         }
+        public async Task<bool> InsertDataAsync(string tableName, Dictionary<string, object> data)
+        {
+            try
+            {
+                string json = JsonSerializer.Serialize(data);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await _httpClient.PostAsync($"{_supabaseUrl}/rest/v1/{tableName}", content);
+
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[InsertDataAsync Hatası]: {ex.Message}");
+                return false;
+            }
+        }
     }
 }

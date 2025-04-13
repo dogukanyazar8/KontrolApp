@@ -84,4 +84,32 @@ public partial class OtomatTakipPage : ContentPage
             await Navigation.PushAsync(new OtomatTakipDurum(otomatId, otomatName));
         }
     }
+    private async void OnOtomatlariKapatClicked(object sender, EventArgs e)
+    {
+        bool confirm = await DisplayAlert("Otomatlarý Kapat", "Tüm otomatlarý kapatmak ve sipariþ verilerini sýfýrlamak istediðinize emin misiniz?", "Evet", "Hayýr");
+        if (!confirm) return;
+
+        var updateData = new Dictionary<string, object>
+    {
+        { "otomat_durumu", "Kapalý" },
+        { "siparis_no", "" },
+        { "model_adi", "" },
+        { "siparis_adet", 0 },
+        { "siparis_tamamlanan", 0 },
+        { "renk", "" }
+    };
+
+        foreach (var item in MachinesList.ItemsSource)
+        {
+            var machine = item.GetType().GetProperty("id")?.GetValue(item);
+            if (machine != null)
+            {
+                await _supabaseService.UpdateDataAsync("makineListesi", "id", Convert.ToInt32(machine), updateData);
+            }
+        }
+
+        await DisplayAlert("Baþarýlý", "Tüm otomatlar kapatýldý ve sipariþ bilgileri sýfýrlandý.", "Tamam");
+        await LoadData();
+    }
+
 }
